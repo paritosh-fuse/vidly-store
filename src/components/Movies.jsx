@@ -8,6 +8,7 @@ import { getGenres } from "../fakeGenreService";
 import ListGroup from "./common/ListGroup";
 import MoviesTable from "./MoviesTable";
 import _ from "lodash";
+
 export default class Movies extends Component {
   state = {
     movies: [],
@@ -24,6 +25,20 @@ export default class Movies extends Component {
       movies: getMovies(),
     });
   }
+
+  getPagedData = () => {
+    const { pageSize, activePage, movies, selectedGenre, sortColumn } =
+      this.state;
+    const movies_filtered = filter_data(movies, "genre", "_id", selectedGenre);
+    const sorted_data = _.orderBy(
+      movies_filtered,
+      [sortColumn.path],
+      [sortColumn.order]
+    );
+    const movies_paginated = paginate(sorted_data, pageSize, activePage);
+    return { totalCount: movies_filtered.length, data: movies_paginated };
+  };
+
   handleDelete = (movie) => {
     const movies = this.state.movies.filter((item) => item._id !== movie._id);
     this.setState({ movies });
@@ -48,13 +63,8 @@ export default class Movies extends Component {
   render() {
     const { pageSize, activePage, movies, genre, selectedGenre, sortColumn } =
       this.state;
-    const movies_filtered = filter_data(movies, "genre", "_id", selectedGenre);
-    const sorted_data = _.orderBy(
-      movies_filtered,
-      [sortColumn.path],
-      [sortColumn.order]
-    );
-    const movies_paginated = paginate(sorted_data, pageSize, activePage);
+    const { totalCount, data } = this.getPagedData();
+
     return (
       <div className="row" style={{ padding: 20 }}>
         <div className="col-3">
@@ -65,14 +75,14 @@ export default class Movies extends Component {
           />
         </div>
         <div className="col">
-          {movies.length === 0 ? (
+          {totalCount === 0 ? (
             <p>No Movies to Show!</p>
           ) : (
             <div>
-              <div>{`Showing ${movies_filtered.length} movies`}</div>
+              <div>{`Showing ${totalCount} movies`}</div>
               <div>
                 <MoviesTable
-                  movies={movies_paginated}
+                  movies={data}
                   sortColumn={sortColumn}
                   onDelete={this.handleDelete}
                   onLike={this.handleLike}
@@ -81,7 +91,7 @@ export default class Movies extends Component {
               </div>
               <div>
                 <Pagination
-                  itemsCount={movies_filtered.length}
+                  itemsCount={totalCount}
                   pageSize={pageSize}
                   onPageChange={this.handlePageChange}
                   activePage={activePage}

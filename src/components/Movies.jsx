@@ -1,7 +1,6 @@
-import { getMovies } from "../fakeMovieService";
 import React, { Component } from "react";
-
 import Pagination from "./common/Pagination";
+import { getMovies } from "../fakeMovieService";
 import { paginate } from "./utils/paginate";
 import filter_data from "./utils/filter";
 import { getGenres } from "../fakeGenreService";
@@ -61,7 +60,7 @@ export default class Movies extends Component {
     this.setState({ selectedGenre: genre });
   };
   render() {
-    const { pageSize, activePage, movies, genre, selectedGenre, sortColumn } =
+    const { pageSize, activePage, genre, selectedGenre, sortColumn } =
       this.state;
     const { totalCount, data } = this.getPagedData();
 

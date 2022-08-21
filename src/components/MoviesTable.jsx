@@ -2,12 +2,20 @@ import React, { Component } from "react";
 import { Button } from "react-bootstrap";
 import Table from "./common/Table";
 import Like from "./common/Like";
+import { Link } from "react-router-dom";
 
 export default class MoviesTable extends Component {
   render() {
     const { movies, onDelete, onLike, sortColumn, onSort } = this.props;
     const columns = [
-      { path: "title", label: "Title", type: "alpha" },
+      {
+        path: "title",
+        label: "Title",
+        type: "alpha",
+        content: (movie) => (
+          <Link to={`/movie/${movie._id}`}>{movie.title}</Link>
+        ),
+      },
       { path: "genre.name", label: "Genre", type: "alpha" },
       { path: "numberInStock", label: "Stock", type: "num" },
       { path: "dailyRentalRate", label: "Rate", type: "num" },

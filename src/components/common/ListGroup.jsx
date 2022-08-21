@@ -11,11 +11,7 @@ export default function ListGroup(props) {
           }`}
           key={item._id}
         >
-          <a
-            href="/#"
-            className="page-link"
-            onClick={() => onGenreChange(item._id)}
-          >
+          <a className="page-link" onClick={() => onGenreChange(item._id)}>
             {item.name}
           </a>
         </li>

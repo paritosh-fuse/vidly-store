@@ -17,7 +17,7 @@ function getSortIcon(sortColumn, columnPath, columnType) {
       } else {
         icon = faSortAlphaDown;
       }
-    } else if (columnType == "num") {
+    } else if (columnType === "num") {
       if (sortColumn.order === "desc") {
         icon = faSortNumericUp;
       } else {

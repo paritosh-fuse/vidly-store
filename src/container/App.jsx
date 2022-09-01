@@ -1,19 +1,21 @@
 import React, { Component } from "react";
+import { Route, Redirect } from "react-router-dom";
 import Movies from "../components/Movies";
 import MovieForm from "../components/MovieForm";
 import Rentals from "../components/Rentals";
 import Customers from "../components/Customers";
 import NotFound from "../components/NotFound";
+import NavBar from "../components/common/NavBar";
 import "bootstrap/dist/css/bootstrap.min.css";
 import "./App.css";
-import { Route, Redirect } from "react-router-dom";
-import NavBar from "../components/common/NavBar";
+import LoginForm from "../components/LoginForm";
 
 export default class App extends Component {
   render() {
     return (
       <main>
         <NavBar />
+        <Route path="/login" component={(props) => <LoginForm {...props} />} />
         <Route
           path="/movie/:id"
           component={(props) => <MovieForm {...props} />}

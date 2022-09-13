@@ -2,20 +2,23 @@ import React, { Component } from "react";
 import Input from "./common/Input";
 import Joi from "joi-browser";
 import { validate, validateProperty } from "./utils/validate";
-export default class LoginForm extends Component {
+export default class Register extends Component {
   state = {
     data: {
       username: "",
       password: "",
+      name: "",
     },
     errors: {
       username: "",
       password: "",
+      name: "",
     },
   };
 
   schema = {
     username: Joi.string().alphanum().min(3).required().label("Username"),
+    name: Joi.string().alphanum().min(3).required().label("Name"),
     password: Joi.string().alphanum().min(3).required().label("Password"),
   };
 
@@ -43,7 +46,7 @@ export default class LoginForm extends Component {
     const { data, errors } = this.state;
     return (
       <div>
-        <h2>Login</h2>
+        <h2>Register</h2>
         <div
           style={{
             display: "flex",
@@ -69,12 +72,21 @@ export default class LoginForm extends Component {
               error={errors.password}
             />
 
+            <Input
+              label={"Name"}
+              name={"name"}
+              value={data.name}
+              onValueChange={this.handleChange}
+              type="name"
+              error={errors.name}
+            />
+
             <button
               style={{ margin: "2% 0" }}
               className="btn btn-primary"
               onClick={this.handleSubmit}
             >
-              Login
+              Register
             </button>
           </form>
         </div>

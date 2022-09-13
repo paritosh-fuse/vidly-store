@@ -7,21 +7,25 @@ import { getGenres } from "../fakeGenreService";
 import ListGroup from "./common/ListGroup";
 import MoviesTable from "./MoviesTable";
 import _ from "lodash";
+import Input from "./common/Input";
 
 export default class Movies extends Component {
   state = {
     movies: [],
+    allMovies: [],
     genre: [],
     pageSize: 5,
     activePage: 1,
     selectedGenre: "all",
     sortColumn: { path: "title", order: "asc" },
+    search: "",
   };
 
   componentDidMount() {
     this.setState({
       genre: [{ _id: "all", name: "All Genres" }, ...getGenres()],
       movies: getMovies(),
+      allMovies: getMovies(),
     });
   }
 
@@ -59,13 +63,37 @@ export default class Movies extends Component {
   handleGenreSelection = (genre) => {
     this.setState({ selectedGenre: genre });
   };
+
+  handleSearch = (e) => {
+    console.log(e.currentTarget.value);
+    if (!e.currentTarget.value) {
+      this.setState({ movies: this.state.allMovies });
+      return;
+    }
+    const allMovies = this.state.allMovies;
+    const filteredMovies = allMovies.filter((movie) =>
+      movie.title.toLowerCase().includes(e.currentTarget.value.toLowerCase())
+    );
+    this.setState({ movies: filteredMovies });
+    console.log(filteredMovies);
+  };
   render() {
     const { pageSize, activePage, genre, selectedGenre, sortColumn } =
       this.state;
+    const { history } = this.props;
     const { totalCount, data } = this.getPagedData();
 
     return (
       <div className="row" style={{ padding: 20 }}>
+        <div style={{ padding: "2%" }}>
+          <Input
+            label={"Search"}
+            name={"search"}
+            value={data.search}
+            onValueChange={this.handleSearch}
+            type="text"
+          />
+        </div>
         <div className="col-3">
           <ListGroup
             items={genre}
@@ -75,9 +103,18 @@ export default class Movies extends Component {
         </div>
         <div className="col">
           {totalCount === 0 ? (
-            <p>No Movies to Show!</p>
+            <div>
+              <p>No Movies to Show!</p>
+            </div>
           ) : (
             <div>
+              <button
+                style={{ margin: "0 0 1% 0" }}
+                className="btn btn-primary"
+                onClick={() => history.push("/movie/new")}
+              >
+                New Movie
+              </button>
               <div>{`Showing ${totalCount} movies`}</div>
               <div>
                 <MoviesTable

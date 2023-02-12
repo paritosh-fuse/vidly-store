@@ -34,7 +34,7 @@ export default class App extends Component {
           path="/customers"
           component={(props) => <Customers {...props} />}
         />
-        <Route path="/rentals" component={(props) => <Rentals {...props} />} />
+        <Route path="/rental" component={(props) => <Rentals {...props} />} />
         <Route
           path="/not-found"
           component={(props) => <NotFound {...props} />}
